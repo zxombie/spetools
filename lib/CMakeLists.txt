@@ -7,7 +7,9 @@ set(SPEDECODE_FILES
 add_library(spedecode
 	${SPEDECODE_FILES}
 )
-target_compile_options(spedecode PRIVATE -Werror -Wall -Wextra)
+if(NOT (CMAKE_C_COMPILER_ID STREQUAL "MSVC"))
+	target_compile_options(spedecode PRIVATE -Werror -Wall -Wextra)
+endif()
 
 if (SPE_FUZZ STREQUAL "yes")
 	function(spedecodefuzz SAN)
