@@ -107,7 +107,7 @@ bool spe_packet_decode_next(struct spe_decode_ctx *, int flags);
 	(uint16_t)(((__header & 0x0300) >> 5) | (__header & 0x0007));	\
 })
 
-#define	SPE_OPERATION_TYPE_CLASS(h)	((h) & 0x3)
+#define	SPE_OPERATION_TYPE_CLASS(h)	(uint16_t)((h) & 0x3)
 #define	SPE_OPERATION_TYPE_OTHER	0x0
 #define	SPE_OPERATION_TYPE_LOAD_STORE	0x1
 #define	SPE_OPERATION_TYPE_BRANCH	0x2
