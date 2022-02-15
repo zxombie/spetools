@@ -163,8 +163,10 @@ spe_packet_get_data(struct spe_decode_ctx *ctx, uint64_t *datap,
 		*datap = 0;
 		*data_lenp = data_len;
 		if (data_len > 0) {
-			/* XXX: Endian safe? */
-			memcpy(datap, (uint8_t *)ctx->buf + ctx->off, data_len);
+			for (int i = data_len - 1; i >= 0; i--) {
+				*datap <<= 8;
+				*datap |= *((uint8_t *)ctx->buf + ctx->off + i);
+			}
 		}
 	}
 	ctx->off += data_len;
