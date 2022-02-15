@@ -182,7 +182,7 @@ packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
 	(void)priv;
 	(void)type;
 
-	//printf("header: %"PRIx16" data: %"PRIx64"\n", header, data);
+	printf("header: %"PRIx16" data: %"PRIx64"\n", header, data);
 }
 
 static void
