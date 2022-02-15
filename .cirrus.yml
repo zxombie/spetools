@@ -1,0 +1,10 @@
+freebsd_task:
+  freebsd_instance:
+    image_family: freebsd-13-0
+  install_script:
+    - pkg install -y cmake
+  script:
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
