@@ -32,11 +32,13 @@
 #include <sys/stat.h>
 
 #include <assert.h>
-#include <err.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <inttypes.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include <spedecode.h>
@@ -46,6 +48,36 @@ usage(void)
 {
 	fprintf(stderr, "spe_decode file [file ...]\n");
 	exit(1);
+}
+
+static void
+spe_errx(int rv, const char *fmt, ...)
+{
+	va_list args;
+
+	fprintf(stderr, "spe_decode: ");
+	va_start(args, fmt);
+	vfprintf(stderr, fmt, args);
+	va_end(args);
+
+	exit(rv);
+}
+
+static void
+spe_err(int rv, const char *fmt, ...)
+{
+	va_list args;
+	int errno_save;
+
+	errno_save = errno;
+
+	fprintf(stderr, "spe_decode: ");
+	va_start(args, fmt);
+	vfprintf(stderr, fmt, args);
+	va_end(args);
+	fprintf(stderr, ": %s\n", strerror(errno_save));
+
+	exit(rv);
 }
 
 static void
@@ -201,23 +233,23 @@ process(struct spe_decode_ctx *ctx, const char *file)
 
 	fd = open(file, O_RDONLY | O_CLOEXEC);
 	if (fd == -1) {
-		err(1, "Unable to open \"%s\"", file);
+		spe_err(1, "Unable to open \"%s\"", file);
 	}
 
 	error = fstat(fd, &sb);
 	if (error == -1) {
-		err(1, "Unable to stat \"%s\"", file);
+		spe_err(1, "Unable to stat \"%s\"", file);
 	}
 
 #if defined(SPE_MMAP)
 	buf = mmap(NULL, sb.st_size, PROT_READ, MAP_SHARED, fd, 0);
 	if (buf == MAP_FAILED) {
-		err(1, "Unable to mmap \"%s\"", file);
+		spe_err(1, "Unable to mmap \"%s\"", file);
 	}
 #else
 	buf = calloc(sb.st_size, 1);
 	if (buf == NULL) {
-		err(1, "Unable to allocate %zu bytes", sb.st_size);
+		spe_err(1, "Unable to allocate %zu bytes", sb.st_size);
 	}
 	remaining = sb.st_size;
 	cur = buf;
@@ -226,7 +258,7 @@ process(struct spe_decode_ctx *ctx, const char *file)
 
 		read_len = read(fd, cur, remaining);
 		if (read_len == -1) {
-			err(1, "Unable to read from \"%s\"", file);
+			spe_err(1, "Unable to read from \"%s\"", file);
 		}
 		assert((size_t)read_len <= remaining);
 		remaining -= read_len;
@@ -234,7 +266,8 @@ process(struct spe_decode_ctx *ctx, const char *file)
 #endif
 
 	if (!spe_decode_ctx_add(ctx, 0, buf, sb.st_size)) {
-		errx(1, "Unable to add data from \"%s\" to the context", file);
+		spe_errx(1, "Unable to add data from \"%s\" to the context",
+		    file);
 	}
 
 	while (spe_packet_decode_next(ctx, SPE_PACKET_DECODE_SKIP_PADDING)) {
@@ -242,7 +275,7 @@ process(struct spe_decode_ctx *ctx, const char *file)
 	}
 
 	if (!spe_decode_ctx_release(ctx, buf)) {
-		errx(1, "Unable to release buffer from the context");
+		spe_errx(1, "Unable to release buffer from the context");
 	}
 
 #if defined(SPE_MMAP)
@@ -264,7 +297,7 @@ main(int argc, char *argv[])
 
 	ctx = spe_decode_ctx_alloc();
 	if (ctx == NULL) {
-		errx(1, "Unable to allocate a decode context");
+		spe_errx(1, "Unable to allocate a decode context");
 	}
 
 	spe_packet_decode_set_callback(ctx, SPE_PKT_INVALID, packet);
