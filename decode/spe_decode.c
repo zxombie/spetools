@@ -26,9 +26,12 @@
  * SUCH DAMAGE.
  */
 
+#if defined(SPE_MMAP)
 #include <sys/mman.h>
+#endif
 #include <sys/stat.h>
 
+#include <assert.h>
 #include <err.h>
 #include <fcntl.h>
 #include <inttypes.h>
@@ -191,6 +194,10 @@ process(struct spe_decode_ctx *ctx, const char *file)
 	struct stat sb;
 	void *buf;
 	int error, fd;
+#if !defined(SPE_MMAP)
+	char *cur;
+	size_t remaining;
+#endif
 
 	fd = open(file, O_RDONLY | O_CLOEXEC);
 	if (fd == -1) {
@@ -202,10 +209,29 @@ process(struct spe_decode_ctx *ctx, const char *file)
 		err(1, "Unable to stat \"%s\"", file);
 	}
 
+#if defined(SPE_MMAP)
 	buf = mmap(NULL, sb.st_size, PROT_READ, MAP_SHARED, fd, 0);
 	if (buf == MAP_FAILED) {
 		err(1, "Unable to mmap \"%s\"", file);
 	}
+#else
+	buf = calloc(sb.st_size, 1);
+	if (buf == NULL) {
+		err(1, "Unable to allocate %zu bytes", sb.st_size);
+	}
+	remaining = sb.st_size;
+	cur = buf;
+	while (remaining > 0) {
+		ssize_t read_len;
+
+		read_len = read(fd, cur, remaining);
+		if (read_len == -1) {
+			err(1, "Unable to read from \"%s\"", file);
+		}
+		assert((size_t)read_len <= remaining);
+		remaining -= read_len;
+	}
+#endif
 
 	if (!spe_decode_ctx_add(ctx, 0, buf, sb.st_size)) {
 		errx(1, "Unable to add data from \"%s\" to the context", file);
@@ -218,6 +244,10 @@ process(struct spe_decode_ctx *ctx, const char *file)
 	if (!spe_decode_ctx_release(ctx, buf)) {
 		errx(1, "Unable to release buffer from the context");
 	}
+
+#if defined(SPE_MMAP)
+	munmap(buf, sb.st_size);
+#endif
 
 	close(fd);
 
