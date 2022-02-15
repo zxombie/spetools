@@ -39,7 +39,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if !defined(_MSC_VER)
 #include <unistd.h>
+#else
+/* No unistd.h on MSVC, use io.h for close */
+#include <io.h>
+#endif
 
 #include <spedecode.h>
 
