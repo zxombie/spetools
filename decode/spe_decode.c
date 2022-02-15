@@ -67,7 +67,7 @@ address_packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
 		printf("Index: %x ", index);
 		printf("Addr: %"PRIx64" ", SPE_ADDRESS_ADDR_SE(data));
 		if (index == SPE_ADDRESS_IDX_DATA_VA) {
-			printf("Tag: %lx ", SPE_ADDRESS_TAG(data));
+			printf("Tag: %"PRIx64" ", SPE_ADDRESS_TAG(data));
 		} else if (index == SPE_ADDRESS_IDX_DATA_PA) {
 			printf("NS: %"PRIx64" Checked: %s Phys tag: %"PRIx64" ",
 			    SPE_ADDRESS_NS(data),
