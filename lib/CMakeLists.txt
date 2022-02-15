@@ -9,14 +9,16 @@ add_library(spedecode
 )
 target_compile_options(spedecode PRIVATE -Werror -Wall -Wextra)
 
-function(spedecodefuzz SAN)
-	add_library(spedecode_fuzz_${SAN}
-		${SPEDECODE_FILES}
-	)
-	target_compile_options(spedecode_fuzz_${SAN}
-		PRIVATE
-		-g -O1 -fsanitize=fuzzer,${SAN} -DSPE_FUZZ_TARGET)
-endfunction()
+if (SPE_FUZZ STREQUAL "yes")
+	function(spedecodefuzz SAN)
+		add_library(spedecode_fuzz_${SAN}
+			${SPEDECODE_FILES}
+		)
+		target_compile_options(spedecode_fuzz_${SAN}
+			PRIVATE
+			-g -O1 -fsanitize=fuzzer,${SAN} -DSPE_FUZZ_TARGET)
+	endfunction()
 
-spedecodefuzz(address)
-spedecodefuzz(undefined)
+	spedecodefuzz(address)
+	spedecodefuzz(undefined)
+endif()
