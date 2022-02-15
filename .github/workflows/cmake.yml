@@ -22,7 +22,8 @@ jobs:
             name: "Mac Latest Clang",
             os: macos-latest,
             cc: "clang",
-            cxx: "clang++"
+            cxx: "clang++",
+            cmake-args: "-DCMAKE_OSX_ARCHITECTURES='arm64;x86_64'"
           }
         - {
             name: "Ubuntu Latest GCC",
@@ -38,10 +39,18 @@ jobs:
             cmake-args: "-DSPE_FUZZ=yes"
           }
         - {
-            name: "Windows Latest Cl",
+            name: "Windows Latest arm64",
             os: windows-latest,
             cc: "cl",
-            cxx: "cl"
+            cxx: "cl",
+            cmake-args: "-A ARM64"
+          }
+        - {
+            name: "Windows Latest x86",
+            os: windows-latest,
+            cc: "cl",
+            cxx: "cl",
+            cmake-args: "-A x64"
           }
     steps:
     - uses: actions/checkout@v2
