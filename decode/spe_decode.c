@@ -192,7 +192,7 @@ process(struct spe_decode_ctx *ctx, const char *file)
 	void *buf;
 	int error, fd;
 
-	fd = open(file, O_RDONLY);
+	fd = open(file, O_RDONLY | O_CLOEXEC);
 	if (fd == -1) {
 		err(1, "Unable to open \"%s\"", file);
 	}
