@@ -109,7 +109,7 @@ spe_packet_get_header(struct spe_decode_ctx *ctx, int flags, uint16_t *headerp,
 bool
 spe_packet_data_len(struct spe_decode_ctx *ctx, int *data_lenp)
 {
-	int data_len, header_len;
+	int data_len;
 	uint16_t header;
 
 	if (ctx->header) {
@@ -125,10 +125,9 @@ spe_packet_data_len(struct spe_decode_ctx *ctx, int *data_lenp)
 	}
 
 	header = ctx->last_header;
-	header_len = ctx->last_header_len;;
 
-	assert(header_len > 0);
-	assert(header_len <= 2);
+	assert(ctx->last_header_len > 0);
+	assert(ctx->last_header_len <= 2);
 
 	if (header < 0x20) {
 		data_len = 0;
