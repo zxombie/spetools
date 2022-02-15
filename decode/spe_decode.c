@@ -228,8 +228,9 @@ main(int argc, char *argv[])
 {
 	struct spe_decode_ctx *ctx;
 
-	if (argc < 2)
+	if (argc < 2) {
 		usage();
+	}
 
 	ctx = spe_decode_ctx_alloc();
 	if (ctx == NULL) {
