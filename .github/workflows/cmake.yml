@@ -37,6 +37,12 @@ jobs:
             cxx: "clang++",
             cmake-args: "-DSPE_FUZZ=yes"
           }
+        - {
+            name: "Windows Latest Cl",
+            os: windows-latest,
+            cc: "cl",
+            cxx: "cl"
+          }
     steps:
     - uses: actions/checkout@v2
 
