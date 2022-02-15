@@ -51,6 +51,10 @@ address_packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
 {
 	int index;
 
+	(void)ctx;
+	(void)priv;
+	(void)type;
+
 	printf("Address ");
 
 	index = SPE_ADDRESS_INDEX(header);
@@ -86,6 +90,11 @@ static void
 context_packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
     uint16_t header, uint64_t data)
 {
+	(void)ctx;
+	(void)priv;
+	(void)type;
+	(void)header;
+
 	printf("Context: %"PRIx64"\n", data);
 }
 
@@ -93,6 +102,10 @@ static void
 counter_packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
     uint16_t header, uint64_t data)
 {
+	(void)ctx;
+	(void)priv;
+	(void)type;
+
 	printf("Counter: %"PRIx16" %"PRIu64"\n", SPE_COUNTER_INDEX(header),
 	    data);
 }
@@ -101,6 +114,11 @@ static void
 data_source_packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
     uint16_t header, uint64_t data)
 {
+	(void)ctx;
+	(void)priv;
+	(void)type;
+	(void)header;
+
 	printf("Data source: %"PRIx64"\n", data);
 }
 
@@ -108,6 +126,12 @@ static void
 end_packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
     uint16_t header, uint64_t data)
 {
+	(void)ctx;
+	(void)priv;
+	(void)type;
+	(void)header;
+	(void)data;
+
 	printf("===\n");
 }
 
@@ -115,6 +139,11 @@ static void
 events_packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
     uint16_t header, uint64_t data)
 {
+	(void)ctx;
+	(void)priv;
+	(void)type;
+	(void)header;
+
 	printf("Events: %"PRIx64"\n", data);
 }
 
@@ -122,6 +151,10 @@ static void
 operation_packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
     uint16_t header, uint64_t data)
 {
+	(void)ctx;
+	(void)priv;
+	(void)type;
+
 	printf("Operation type: Class: %"PRIx64" Subclass: %"PRIx64"\n",
 	    SPE_OPERATION_TYPE_CLASS(header),
 	    data);
@@ -131,6 +164,10 @@ static void
 timestamp_packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
     uint16_t header, uint64_t data)
 {
+	(void)ctx;
+	(void)priv;
+	(void)type;
+	(void)header;
 
 	printf("Timestamp: %"PRId64"\n", data);
 	/* This is the last packet in this record (if enabled) */
@@ -141,6 +178,10 @@ static void
 packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
     uint16_t header, uint64_t data)
 {
+	(void)ctx;
+	(void)priv;
+	(void)type;
+
 	//printf("header: %"PRIx16" data: %"PRIx64"\n", header, data);
 }
 
