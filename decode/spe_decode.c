@@ -155,7 +155,7 @@ operation_packet(struct spe_decode_ctx *ctx, void *priv, spe_packet_type type,
 	(void)priv;
 	(void)type;
 
-	printf("Operation type: Class: %"PRIx64" Subclass: %"PRIx64"\n",
+	printf("Operation type: Class: %"PRIx16" Subclass: %"PRIx64"\n",
 	    SPE_OPERATION_TYPE_CLASS(header),
 	    data);
 }
