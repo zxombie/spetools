@@ -104,7 +104,7 @@ bool spe_packet_decode_next(struct spe_decode_ctx *, int flags);
 
 #define	SPE_COUNTER_INDEX(h)	({					\
 	uint16_t __header = (h);					\
-	((__header & 0x0300) >> 5) | (__header & 0x0007);		\
+	(uint16_t)(((__header & 0x0300) >> 5) | (__header & 0x0007));	\
 })
 
 #define	SPE_OPERATION_TYPE_CLASS(h)	((h) & 0x3)
