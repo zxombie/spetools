@@ -42,6 +42,7 @@
 #if !defined(_MSC_VER)
 #include <unistd.h>
 typedef	ssize_t read_t;
+#define	SPE_NORETURN	__attribute__((__noreturn__))
 #else
 /* No unistd.h on MSVC, use io.h for close */
 #include <io.h>
@@ -51,6 +52,7 @@ typedef	ssize_t read_t;
 #define	read		_read
 #define	O_CLOEXEC	0
 typedef	int read_t;
+#define	SPE_NORETURN	__declspec(noreturn)
 #endif
 
 #include <spedecode.h>
@@ -62,7 +64,7 @@ usage(void)
 	exit(1);
 }
 
-static void
+SPE_NORETURN static void
 spe_errx(int rv, const char *fmt, ...)
 {
 	va_list args;
@@ -75,7 +77,7 @@ spe_errx(int rv, const char *fmt, ...)
 	exit(rv);
 }
 
-static void
+SPE_NORETURN static void
 spe_err(int rv, const char *fmt, ...)
 {
 	va_list args;
