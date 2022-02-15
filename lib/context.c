@@ -120,6 +120,7 @@ spe_decode_ctx_add(struct spe_decode_ctx *ctx, uint32_t flags, void *data,
 				    "Unable to allocate new buffer");
 				return (false);
 			}
+			/* NOLINTNEXTLINE */
 			memcpy(ctx->buf, data, len);
 			ctx->flags |= SPE_OWN_BUF;
 		}
@@ -166,6 +167,7 @@ spe_decode_ctx_add(struct spe_decode_ctx *ctx, uint32_t flags, void *data,
 		}
 
 		/* Copy the tail data */
+		/* NOLINTNEXTLINE */
 		memcpy(tmp, (uint8_t *)ctx->buf + ctx->off, tail_len);
 
 		if ((ctx->flags & SPE_OWN_BUF) != 0) {
@@ -178,6 +180,7 @@ spe_decode_ctx_add(struct spe_decode_ctx *ctx, uint32_t flags, void *data,
 	}
 
 	if (len > 0) {
+		/* NOLINTNEXTLINE */
 		memcpy((uint8_t *)ctx->buf + ctx->len, data, len);
 		ctx->len += len;
 	}
@@ -209,6 +212,7 @@ spe_decode_ctx_release(struct spe_decode_ctx *ctx, void *buf)
 				return (false);
 			}
 
+			/* NOLINTNEXTLINE */
 			memcpy(tmp, (uint8_t *)ctx->buf + ctx->off, len);
 			ctx->buf = tmp;
 			ctx->flags |= SPE_OWN_BUF;
