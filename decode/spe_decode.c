@@ -41,6 +41,7 @@
 #include <string.h>
 #if !defined(_MSC_VER)
 #include <unistd.h>
+typedef	ssize_t read_t;
 #else
 /* No unistd.h on MSVC, use io.h for close */
 #include <io.h>
@@ -49,6 +50,7 @@
 #define	close		_close
 #define	read		_read
 #define	O_CLOEXEC	0
+typedef	int read_t;
 #endif
 
 #include <spedecode.h>
@@ -264,7 +266,7 @@ process(struct spe_decode_ctx *ctx, const char *file)
 	remaining = sb.st_size;
 	cur = buf;
 	while (remaining > 0) {
-		ssize_t read_len;
+		read_t read_len;
 
 		read_len = read(fd, cur, remaining);
 		if (read_len == -1) {
