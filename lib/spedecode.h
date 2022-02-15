@@ -72,10 +72,11 @@ bool spe_packet_decode_set_callback(struct spe_decode_ctx *, spe_packet_type,
 #define	SPE_PACKET_DECODE_SKIP_PADDING	0x01
 bool spe_packet_decode_next(struct spe_decode_ctx *, int flags);
 
-#define	SPE_ADDRESS_INDEX(h)	({					\
-	uint16_t __header = (h);					\
-	((__header & 0x0300) >> 5) | (__header & 0x0007);		\
-})
+static inline uint16_t
+SPE_ADDRESS_INDEX(uint16_t header)
+{
+	return (((header & 0x0300) >> 5) | (header & 0x0007));
+}
 #define	SPE_ADDRESS_IDX_PC_VA		0x00
 #define	SPE_ADDRESS_IDX_B_TARGET	0x01
 #define	SPE_ADDRESS_IDX_DATA_VA		0x02
@@ -96,16 +97,17 @@ bool spe_packet_decode_next(struct spe_decode_ctx *, int flags);
 /* Address field - all address packets */
 #define	SPE_ADDRESS_ADDR(p)		((p) & 0xfffffffffffffful)
 /* Sign extended address field */
-#define	SPE_ADDRESS_ADDR_SE(p)		({				\
-	int64_t __addr = SPE_ADDRESS_ADDR(p);				\
-	__addr <<= 8;							\
-	(uint64_t)(__addr >> 8);					\
-})
+static inline uint64_t
+SPE_ADDRESS_ADDR_SE(uint64_t p)
+{
+	return ((int64_t)(SPE_ADDRESS_ADDR(p) << 8) >> 8);
+}
 
-#define	SPE_COUNTER_INDEX(h)	({					\
-	uint16_t __header = (h);					\
-	(uint16_t)(((__header & 0x0300) >> 5) | (__header & 0x0007));	\
-})
+static inline uint16_t
+SPE_COUNTER_INDEX(uint16_t header)
+{
+	return (((header & 0x0300) >> 5) | (header & 0x0007));
+}
 
 #define	SPE_OPERATION_TYPE_CLASS(h)	(uint16_t)((h) & 0x3)
 #define	SPE_OPERATION_TYPE_OTHER	0x0
