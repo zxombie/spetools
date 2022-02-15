@@ -276,6 +276,7 @@ process(struct spe_decode_ctx *ctx, const char *file)
 		}
 		assert((size_t)read_len <= remaining);
 		remaining -= read_len;
+		cur += read_len;
 	}
 #endif
 
