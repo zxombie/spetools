@@ -44,6 +44,11 @@
 #else
 /* No unistd.h on MSVC, use io.h for close */
 #include <io.h>
+/* Use the MSVC name for these functions */
+#define	open		_open
+#define	close		_close
+#define	read		_read
+#define	O_CLOEXEC	0
 #endif
 
 #include <spedecode.h>
